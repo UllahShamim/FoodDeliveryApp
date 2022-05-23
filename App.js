@@ -9,8 +9,12 @@ import {
 } from '@expo-google-fonts/montserrat';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Colors from './assets/colors/colors';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import HomeScreen from './components/home';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   
@@ -25,6 +29,11 @@ export default function App() {
     return null;
   }
 
-  return <Text>Open up App.js to start working on your app!</Text>
-
+  return (
+  <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 };

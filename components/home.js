@@ -5,17 +5,20 @@ import {
     View, 
     StyleSheet, 
     SafeAreaView, 
-    FlatList } 
+    FlatList,
+    ScrollView,
+    StatusBar, 
+    TouchableOpacity } 
     from "react-native";
 import Feather from "react-native-vector-icons/Feather";
-// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Colors from '../assets/colors/colors';
 
 import CategoriesData from "../assets/data/categoriesData";
-// import PopularData from "../assets/data/popularData";
+import PopularData from "../assets/data/popularData";
 
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 const renderCategoryItem = ({ item }) => {
     return (
         <View style={[
@@ -44,7 +47,9 @@ const renderCategoryItem = ({ item }) => {
 
     return (
         <View style={styles.container}>
-           <SafeAreaView>
+            {/* Header  inc Android status bar setup*/}
+        <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false}>
+           <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
                 <View style={styles.headerWrapper}>
                     <Image 
                     source={require("../assets/images/profile.png")}
@@ -79,6 +84,62 @@ const renderCategoryItem = ({ item }) => {
                       />
                 </View>  
             </View>
+
+            {/* Popular section */}
+            <View style={styles.popularWrapper}>
+                <Text style={styles.popularTitle}>Popular</Text>
+                {PopularData.map(item => (
+                    <TouchableOpacity
+                        key={item.id}
+                        onPress={() => navigation.navigate("Details", {
+                            item: item,
+                        })}
+                    >
+                    <View style={[styles.popularCardWrapper, 
+                    {
+                      marginTop: item.id == 1 ? 10 : 20,  
+                    },
+                    ]}>
+                        <View>
+                            <View>
+                                <View style={styles.popularTopWrapper}>
+                                    <MaterialCommunityIcons 
+                                    name="crown" size={12} 
+                                    color={Colors.primary} 
+                                    />
+                                    <Text style={styles.popularTopText}>Top of the week</Text>
+                                </View>
+                                <View>
+                                    <View style={styles.popularTitlesWrapper}>
+                                        <Text style={styles.popularTitlesTitle}>{item.title}</Text>
+                                        <Text style={styles.popularTitlesWeight}>Weight: {item.weight}</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.popularCardBottom}>
+                                    <View style={styles.addPizzaButton}>
+                                        <Feather name="plus" size={10} color={Colors.textDark} />
+                                    </View>
+                                    <View style={styles.ratingWrapper}>
+                                        <MaterialCommunityIcons name="star" size={10} color={Colors.textDark} />
+                                        <Text style={styles.rating}>{item.rating}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            {/* image should really be going here from the video, but it appears below the content in the card
+                            rather than on the right */}
+                            {/* <View style={styles.popularCardRight}>
+                                <Image source={item.image} style={styles.popularCardImage} />
+                            </View> */}
+                        </View>
+                        <View style={styles.popularCardRight}>
+                                <Image source={item.image} style={styles.popularCardImage} />
+                        </View>
+                    </View> 
+                    </TouchableOpacity>
+                ))}
+                
+            </View>
+            </ScrollView>
         </View>
     )
 };
@@ -151,6 +212,15 @@ categoryItemWrapper: {
     backgroundColor: "#F5CA4B",
     marginRight: 20,
     borderRadius: 20,
+    shadowColor: Colors.black,
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+
 },
 categoryItemImage: {
     width: 60,
@@ -177,6 +247,88 @@ categorySelectWrapper: {
 },
 categorySelectIcon: {
    alignSelf: "center",
+},
+popularWrapper: {
+    paddingHorizontal: 20,
+},
+popularTitle: {
+    fontFamily: "Montserrat_700Bold",
+    fontSize: 16,
+},
+popularCardWrapper: {
+    backgroundColor: Colors.white,
+    borderRadius: 25,
+    paddingTop: 20, 
+    paddingLeft: 20,
+    flexDirection: "row",
+    overflow: "hidden",
+    shadowColor: Colors.black,
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+
+},
+popularTopWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+},
+popularTopText: {
+    marginLeft: 10,
+    fontFamily: "Montserrat_600SemiBold",
+    fontSize: 14,
+},
+popularTitlesWrapper: {
+    marginTop: 20,
+},
+popularTitlesTitle: {
+    fontFamily: "Montserrat_600SemiBold",
+    fontSize: 14,
+    color: Colors.textDark,
+},
+popularTitlesWeight: {
+    fontFamily: "Montserrat_500Medium",
+    fontSize: 12,
+    color: Colors.textLight,
+    marginTop: 5,
+},
+popularCardBottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    marginLeft: -20,
+},
+addPizzaButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+    borderTopRightRadius: 25,
+    borderBottomLeftRadius: 25,
+},
+ratingWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20,
+},
+rating: {
+    fontFamily: "Montserrat_600SemiBold",
+    fontSize: 12,
+    color: Colors.textDark,
+    marginLeft: 5,
+},
+popularCardRight: {
+    marginLeft: 40,
+    // marginLeft: 5,
+},
+popularCardImage: {
+    width: 210,
+    height: 125,
+    // width: 150,
+    // height: 100,
+    resizeMode: 'contain',
 },
 });
 

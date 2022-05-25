@@ -27,7 +27,7 @@ const PopularData = [
                 image: require("../images/cheese.png")
             },
             {
-                id: 1,
+                id: "4",
                 name: "garlic",
                 image: require("../images/garlic.png")
             },

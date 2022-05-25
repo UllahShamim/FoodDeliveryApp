@@ -6,7 +6,8 @@ import {
     SafeAreaView, 
     StatusBar, 
     TouchableOpacity,
-    Image 
+    Image,
+    FlatList,
 } from "react-native";
 
 import Feather from "react-native-vector-icons/Feather";
@@ -19,6 +20,16 @@ import PopularData from "../assets/data/popularData";
 
 const Details = ({ route, navigation }) => {
     const { item } = route.params;
+
+    const renderIngredientsItem = ({ item }) => {
+        return (
+            <View style={[styles.ingredientImageWrapper, {
+                marginLeft: item.id === "1" ? 20 : 0,
+            }]}>
+                <Image source={item.image} style={styles.ingredientImage} />
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -66,6 +77,26 @@ const Details = ({ route, navigation }) => {
                     <Image source={item.image} style={styles.itemImage}/>
                 </View>
             </View>
+            {/* Ingredients */}
+            <View style={styles.ingredientsWrapper}>
+                <Text style={styles.ingredientsTitle}>Ingredients</Text>
+                <View style={styles.ingredientsListWrapper}>
+                <FlatList 
+                      data={item.ingredients}
+                      renderItem={renderIngredientsItem}
+                      keyExtractor={item => item.id}
+                      horizontal = {true}
+                      showsHorizontalScrollIndicator={false}
+                      />
+                </View>
+            </View>
+            {/* Place an order */}
+            <TouchableOpacity onPress={() => alert("Your order has been placed!")}>
+                <View style={styles.orderWrapper}>
+                    <Text style={styles.orderText}>Place an order</Text>
+                    <Feather name="chevron-right" size={18} color={Colors.black} /> 
+                </View>
+            </TouchableOpacity>
         </View>
     )
 };
@@ -141,6 +172,52 @@ const styles = StyleSheet.create ({
     itemImage: {
         resizeMode: "contain",
         marginLeft: 50,
+    },
+    ingredientsWrapper: {
+        marginTop: 40,
+    },
+    ingredientsTitle: {
+        paddingHorizontal: 20,
+        fontFamily: "Montserrat_700Bold",
+        fontSize: 16,
+        color: Colors.textDark,
+    },
+    ingredientsListWrapper: {
+        paddingVertical: 20,
+    },
+    ingredientImageWrapper: {
+        backgroundColor: Colors.white,
+        alignItem: "center",
+        justifyContent: "center",
+        paddingHorizontal: 10,
+        marginRight: 15,
+        borderRadius: 15,
+        shadowColor: Colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 2,
+    },
+    ingredientImage: {
+        resizeMode: "contain",
+    },
+    orderWrapper: {
+        marginTop: 40,
+        marginHorizontal: 20,
+        backgroundColor: Colors.primary,
+        borderRadius: 50,
+        paddingVertical: 25,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    orderText: {
+        fontFamily: "Montserrat_700Bold",
+        fontSize: 14,
+        marginRight: 10,
     },
 
 })
